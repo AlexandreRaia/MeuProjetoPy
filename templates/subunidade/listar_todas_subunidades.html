@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Listar Todas as Subunidades{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Todas as Subunidades</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Sigla</th>
+                    <th>Unidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subunidade in subunidades %}
+                <tr>
+                    <td>{{ subunidade.id }}</td>
+                    <td>{{ subunidade.nome }}</td>
+                    <td>{{ subunidade.sigla }}</td>
+                    <td>{{ subunidade.unidade.nome }}</td>
+                    <td>
+                        <a href="{{ url_for('editar_subunidade', id=subunidade.id) }}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <form action="{{ url_for('excluir_subunidade', id=subunidade.id) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
