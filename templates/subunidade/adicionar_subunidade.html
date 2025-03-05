@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="mb-4">Adicionar Subunidade</h1>
-    <form method="post">
+    <h1>Adicionar Subunidade</h1>
+    <form method="post" action="{{ url_for('subunidade_adicionar', unidade_id=unidade_id) }}">
         <div class="form-group">
             <label for="nome">Nome</label>
             <input type="text" class="form-control" id="nome" name="nome" required>
@@ -17,9 +17,6 @@
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save"></i> Adicionar
         </button>
-        <a href="{{ url_for('listar_subunidades', unidade_id=unidade_id) }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Voltar
-        </a>
     </form>
 </div>
 {% endblock %}

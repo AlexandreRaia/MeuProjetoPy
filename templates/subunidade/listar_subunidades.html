@@ -4,15 +4,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="mb-0">Subunidades de {{ unidade.nome }}</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSubunidadeModal">
-            <i class="fas fa-plus"></i> Adicionar Subunidade
-        </button>
-    </div>
-    <a href="{{ url_for('listar_unidades') }}" class="btn btn-secondary mb-3">
-        <i class="fas fa-arrow-left"></i> Voltar para Unidades
-    </a>
+    <h1 class="mb-4">Subunidades de {{ unidade.nome }}</h1>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -36,102 +28,25 @@
                 </tr>
             </thead>
             <tbody>
-                {% for subunidade in unidade.subunidades %}
+                {% for subunidade in subunidades %}
                 <tr>
                     <td>{{ subunidade.id }}</td>
                     <td>{{ subunidade.nome }}</td>
                     <td>{{ subunidade.sigla }}</td>
                     <td>
-                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal{{ subunidade.id }}">
+                        <a href="{{ url_for('subunidade_editar', id=subunidade.id) }}" class="btn btn-warning btn-sm">
                             <i class="fas fa-edit"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDelete{{ subunidade.id }}">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        </a>
+                        <form action="{{ url_for('subunidade_excluir', id=subunidade.id) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
-                <!-- Modal de Exclusão -->
-                <div class="modal fade" id="confirmDelete{{ subunidade.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                Tem certeza que deseja excluir a subunidade "{{ subunidade.nome }}"?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                <form action="{{ url_for('excluir_subunidade', id=subunidade.id) }}" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger">Excluir</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal de Edição -->
-                <div class="modal fade" id="editModal{{ subunidade.id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editModalLabel">Editar Subunidade</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" action="{{ url_for('editar_subunidade', id=subunidade.id) }}">
-                                    <div class="form-group">
-                                        <label for="nome">Nome</label>
-                                        <input type="text" class="form-control" id="nome" name="nome" value="{{ subunidade.nome }}" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sigla">Sigla</label>
-                                        <input type="text" class="form-control" id="sigla" name="sigla" value="{{ subunidade.sigla }}" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Salvar
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
-</div>
-
-<!-- Modal de Adição de Subunidade -->
-<div class="modal fade" id="addSubunidadeModal" tabindex="-1" role="dialog" aria-labelledby="addSubunidadeModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addSubunidadeModalLabel">Adicionar Subunidade</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="{{ url_for('adicionar_subunidade', unidade_id=unidade.id) }}">
-                    <div class="form-group">
-                        <label for="nome">Nome</label>
-                        <input type="text" class="form-control" id="nome" name="nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="sigla">Sigla</label>
-                        <input type="text" class="form-control" id="sigla" name="sigla" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Adicionar
-                    </button>
-                </form>
-            </div>
-        </div>
     </div>
 </div>
 {% endblock %}

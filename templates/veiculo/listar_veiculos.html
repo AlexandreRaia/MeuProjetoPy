@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Listar Veículos{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Veículos</h1>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addVeiculoModal">
+            <i class="fas fa-plus"></i> Adicionar Veículo
+        </button>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Tipo</th>
+                    <th>Placa</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for veiculo in veiculos %}
+                <tr>
+                    <td>{{ veiculo.id }}</td>
+                    <td>{{ veiculo.marca }}</td>
+                    <td>{{ veiculo.modelo }}</td>
+                    <td>{{ veiculo.tipo }}</td>
+                    <td>{{ veiculo.placa }}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal{{ veiculo.id }}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDelete{{ veiculo.id }}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- Modal de Exclusão -->
+                <div class="modal fade" id="confirmDelete{{ veiculo.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Tem certeza que deseja excluir o veículo "{{ veiculo.marca }} {{ veiculo.modelo }}"?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <form action="{{ url_for('veiculo_excluir', id=veiculo.id) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal de Edição -->
+                <div class="modal fade" id="editModal{{ veiculo.id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Editar Veículo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="{{ url_for('veiculo_editar', id=veiculo.id) }}">
+                                    <div class="form-group">
+                                        <label for="marca">Marca</label>
+                                        <input type="text" class="form-control" id="marca" name="marca" value="{{ veiculo.marca }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="modelo">Modelo</label>
+                                        <input type="text" class="form-control" id="modelo" name="modelo" value="{{ veiculo.modelo }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tipo">Tipo</label>
+                                        <input type="text" class="form-control" id="tipo" name="tipo" value="{{ veiculo.tipo }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="placa">Placa</label>
+                                        <input type="text" class="form-control" id="placa" name="placa" value="{{ veiculo.placa }}" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Salvar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal de Adição de Veículo -->
+<div class="modal fade" id="addVeiculoModal" tabindex="-1" role="dialog" aria-labelledby="addVeiculoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addVeiculoModalLabel">Adicionar Veículo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{{ url_for('veiculo_adicionar') }}">
+                    <div class="form-group">
+                        <label for="marca">Marca</label>
+                        <input type="text" class="form-control" id="marca" name="marca" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo">Modelo</label>
+                        <input type="text" class="form-control" id="modelo" name="modelo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Tipo</label>
+                        <select class="form-control" id="tipo" name="tipo" required>
+                            <option value="Carro">Carro</option>
+                            <option value="Perua">Perua</option>
+                            <option value="Van">Van</option>
+                            <option value="Caminhão">Caminhão</option>
+                            <option value="Ônibus">Ônibus</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="placa">Placa</label>
+                        <input type="text" class="form-control" id="placa" name="placa" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Adicionar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

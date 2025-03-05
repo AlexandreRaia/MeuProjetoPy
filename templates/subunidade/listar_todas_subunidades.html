@@ -36,10 +36,10 @@
                     <td>{{ subunidade.sigla }}</td>
                     <td>{{ subunidade.unidade.nome }}</td>
                     <td>
-                        <a href="{{ url_for('editar_subunidade', id=subunidade.id) }}" class="btn btn-warning btn-sm">
+                        <a href="{{ url_for('subunidade_editar', id=subunidade.id) }}" class="btn btn-warning btn-sm">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <form action="{{ url_for('excluir_subunidade', id=subunidade.id) }}" method="post" style="display:inline;">
+                        <form action="{{ url_for('subunidade_excluir', id=subunidade.id) }}" method="post" style="display:inline;">
                             <button type="submit" class="btn btn-danger btn-sm">
                                 <i class="fas fa-trash"></i>
                             </button>

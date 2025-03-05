@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Veículo{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Editar Veículo</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="post">
+        <div class="form-group">
+            <label for="marca">Marca</label>
+            <input type="text" class="form-control" id="marca" name="marca" value="{{ veiculo.marca }}" required>
+        </div>
+        <div class="form-group">
+            <label for="modelo">Modelo</label>
+            <input type="text" class="form-control" id="modelo" name="modelo" value="{{ veiculo.modelo }}" required>
+        </div>
+        <div class="form-group">
+            <label for="placa">Placa</label>
+            <input type="text" class="form-control" id="placa" name="placa" value="{{ veiculo.placa }}" required>
+        </div>
+        <div class="form-group">
+            <label for="tipo">Tipo</label>
+            <select class="form-control" id="tipo" name="tipo" required>
+                <option value="Carro" {% if veiculo.tipo == 'Carro' %}selected{% endif %}>Carro</option>
+                <option value="Perua" {% if veiculo.tipo == 'Perua' %}selected{% endif %}>Perua</option>
+                <option value="Van" {% if veiculo.tipo == 'Van' %}selected{% endif %}>Van</option>
+                <option value="Caminhão" {% if veiculo.tipo == 'Caminhão' %}selected{% endif %}>Caminhão</option>
+                <option value="Ônibus" {% if veiculo.tipo == 'Ônibus' %}selected{% endif %}>Ônibus</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Salvar
+        </button>
+    </form>
+</div>
+{% endblock %}
