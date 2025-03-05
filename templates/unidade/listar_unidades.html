@@ -49,6 +49,7 @@
                         </form>
                         <a href="{{ url_for('subunidade_adicionar', unidade_id=unidade.id) }}" class="btn btn-success btn-sm">
                             <i class="fas fa-plus"></i> Adicionar Subunidade
+                            <span class="badge badge-light">{{ unidade.subunidades|length }}</span>
                         </a>
                     </td>
                 </tr>

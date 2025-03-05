@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify
 from controllers.unidade_controller import listar_unidades, adicionar_unidade, editar_unidade, excluir_unidade
 from controllers.subunidade_controller import listar_subunidades, listar_todas_subunidades, adicionar_subunidade, editar_subunidade, excluir_subunidade
 from controllers.veiculo_controller import listar_veiculos, adicionar_veiculo, editar_veiculo, excluir_veiculo
+from models import Unidade, Subunidade, Veiculo
 import logging
 
 def init_app(app: Flask):
@@ -10,7 +11,10 @@ def init_app(app: Flask):
     @app.route('/')
     @app.route('/home')
     def home():
-        return render_template('index.html')
+        unidades_count = Unidade.query.count()
+        subunidades_count = Subunidade.query.count()
+        veiculos_count = Veiculo.query.count()
+        return render_template('index.html', unidades_count=unidades_count, subunidades_count=subunidades_count, veiculos_count=veiculos_count)
      
     @app.route('/Sobre')
     def Sobre():
